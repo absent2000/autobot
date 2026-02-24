@@ -1,0 +1,58 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cars24</title>
+<style>
+body{margin:0;font-family:Arial;background:#111;color:#fff}
+.header{padding:15px;font-size:22px;font-weight:bold}
+.card{background:#1b1b1b;margin:10px;padding:10px;border-radius:10px}
+.card img{width:100%;border-radius:8px}
+.price{color:#00e676;font-size:18px;margin-top:5px}
+</style>
+</head>
+<body>
+
+<div class="header">🚗 Підбір авто</div>
+<div id="list"></div>
+
+<script>
+let CARS=[];
+
+async function loadCars(){
+  const res = await fetch('data/cars.json?v=' + Date.now());
+  CARS = await res.json();
+  render();
+}
+
+function render(){
+  const list=document.getElementById('list');
+  list.innerHTML='';
+
+  CARS.forEach(c=>{
+
+    // First photo from folder structure
+    let firstPhoto = "";
+    if(c.vin){
+        firstPhoto = "photos/" + c.vin + "/" + c.vin + "_1.jpg";
+    }
+
+    const div=document.createElement('div');
+    div.className='card';
+    div.innerHTML=`
+      ${firstPhoto ? '<img src="'+firstPhoto+'">' : ''}
+      <div><b>${c.make || ''} ${c.model || ''}</b></div>
+      <div>${c.year || ''}</div>
+      <div class="price">${c.price ? '$'+c.price : ''}</div>
+    `;
+    list.appendChild(div);
+  });
+}
+
+loadCars();
+</script>
+
+</body>
+</html>
