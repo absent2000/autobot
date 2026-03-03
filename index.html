@@ -382,7 +382,7 @@ function render(){
           ${tags.map(t=>`<span class="tag">${t}</span>`).join('')}
           ${dmg?`<span class="tag dmg">⚠ ${dmg}</span>`:''}
         </div>
-        <button class="btn-order-card" onclick="orderCar(event,'${c.vin}','${c.year} ${c.make} ${c.model}')">🚗 Замовити авто</button>
+        <button class="btn-order-card" onclick="orderCar(event,'${c.vin}','${c.year} ${c.make} ${c.model}')">🚗 Хочу таке автом</button>
       </div>
     </div>`;
   }).join('');
