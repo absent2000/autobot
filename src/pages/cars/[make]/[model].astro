@@ -1,0 +1,4 @@
+---
+import WpLayout from '../../../layouts/WpLayout.astro';import ModelPage from '../../../components/ModelPage.astro';import {catalog} from '../../../lib/cars24';export async function getStaticPaths(){const d=(await catalog()).filter((r:any)=>r.vehicle_type==='car');return d.map((r:any)=>({params:{make:r.make_slug,model:r.model_slug},props:{row:r}}))}const {row}=Astro.props;
+---
+<WpLayout title={`${row.make_name} ${row.model_name} — Cars24`}><ModelPage row={row}/></WpLayout>

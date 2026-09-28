@@ -1,0 +1,4 @@
+---
+import WpLayout from '../../../layouts/WpLayout.astro';import ListingPage from '../../../components/ListingPage.astro';import {catalog} from '../../../lib/cars24';export async function getStaticPaths(){const d=(await catalog()).filter((r:any)=>r.vehicle_type==='moto');const makes=[...new Set(d.map((r:any)=>r.make_slug))];return makes.map((make:any)=>({params:{make}}))}const {make}=Astro.params;const items=(await catalog()).filter((r:any)=>r.vehicle_type==='moto'&&r.make_slug===make);const title=items[0]?.make_name||make;
+---
+<WpLayout title={`${title} — Cars24`}><ListingPage items={items} title={title} eyebrow="МОТО · МАРКА"/></WpLayout>

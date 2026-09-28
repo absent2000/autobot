@@ -1,0 +1,4 @@
+---
+import WpLayout from '../../layouts/WpLayout.astro';import LotPage from '../../components/LotPage.astro';import {catalog,demoLot} from '../../lib/cars24';export async function getStaticPaths(){const d=await catalog();const out:any[]=[];for(const row of d){for(let i=0;i<4;i++){const lot=demoLot(row,i);out.push({params:{slug:lot.id.toLowerCase()},props:{row,lot}})}}return out}const {row,lot}=Astro.props;
+---
+<WpLayout title={`${lot.year} ${row.make_name} ${row.model_name} · Lot ${lot.id} — Cars24`}><LotPage row={row} lot={lot}/></WpLayout>

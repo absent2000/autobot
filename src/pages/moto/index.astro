@@ -1,0 +1,4 @@
+---
+import WpLayout from '../../layouts/WpLayout.astro';import ListingPage from '../../components/ListingPage.astro';import {catalog} from '../../lib/cars24';const items=(await catalog()).filter((r:any)=>r.vehicle_type==='moto');
+---
+<WpLayout title="Усі мотоцикли — Cars24"><ListingPage items={items} title="Усі мотоцикли" eyebrow="МОТО · WHITELIST"/></WpLayout>
