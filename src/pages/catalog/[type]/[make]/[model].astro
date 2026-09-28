@@ -1,0 +1,17 @@
+---
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import ModelDetail from '../../../../components/ModelDetail';
+const API='https://pmjachoteyeviwwzotks.supabase.co/functions/v1/cars24-public-api/catalog?limit=500';
+export async function getStaticPaths(){
+  const r=await fetch(API); if(!r.ok)return [];
+  const j=await r.json();
+  return (j.data||[]).map((m:any)=>({params:{type:m.vehicle_type,make:m.make_slug,model:m.model_slug},props:{item:m}}));
+}
+const {type,make,model}=Astro.params;const {item}=Astro.props;
+---
+<BaseLayout title={`${item.make_name} ${item.model_name} — Cars24`} description={`${item.make_name} ${item.model_name}: покоління, характеристики та дані Cars24.`}>
+  <div class="shell page">
+    <header class="page-head"><div class="eyebrow">{item.vehicle_type==='moto'?'Мото':'Авто'} · {item.make_name}</div><h1>{item.make_name} {item.model_name}</h1><p>{item.year_from||'—'} — {item.year_to||'дотепер'}. Перевірені характеристики поколінь та джерела Cars24.</p></header>
+    <ModelDetail client:load type={type!} make={make!} model={model!} />
+  </div>
+</BaseLayout>

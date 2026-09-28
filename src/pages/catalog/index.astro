@@ -1,10 +1,13 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-const budget=Astro.url.searchParams.get('budget');
+import CatalogExplorer from '../../components/CatalogExplorer';
+const API='https://pmjachoteyeviwwzotks.supabase.co/functions/v1/cars24-public-api/catalog?limit=500';
+let models=[];let stats={};let loadError='';
+try{const r=await fetch(API);if(!r.ok)throw new Error(`HTTP ${r.status}`);const j=await r.json();models=j.data||[];stats=j.stats||{};}catch(e){loadError=String(e);}
 ---
-<BaseLayout title="Каталог Cars24">
+<BaseLayout title="Каталог Cars24" description="Каталог моделей авто і мото Cars24 з перевіреними даними та реальними аукціонними джерелами.">
   <div class="shell page">
-    <header class="page-head"><div class="eyebrow">Авто + мото</div><h1>Каталог Cars24</h1><p>{budget?`Бюджет під ключ: $${Number(budget).toLocaleString('en-US')}. Тут будуть тільки варіанти, які проходять реальну економіку Cars24.`:'Енциклопедія моделей та живі лоти з аукціонів США.'}</p></header>
-    <section class="panel"><strong>Наступний шар: 384 моделі + актуальні аукціонні лоти з Supabase.</strong><p style="color:#6b7280;margin:8px 0 0">Каркас маршруту вже готовий; підключення каталогу робимо без дублювання даних у фронтенді.</p></section>
+    <header class="page-head"><div class="eyebrow">Авто + мото</div><h1>Каталог Cars24</h1><p>Не список оголошень, а нормалізований каталог моделей, до якого підключаються покоління, характеристики, аукціонна історія та актуальні лоти.</p></header>
+    {loadError?<section class="panel">Каталог тимчасово не завантажився з API.</section>:<CatalogExplorer client:load models={models} stats={stats} />}
   </div>
 </BaseLayout>
