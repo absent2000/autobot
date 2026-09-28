@@ -3,19 +3,15 @@ name: Cars24 Astro preview publish
 on:
   push:
     branches: [main]
+    paths:
+      - '.github/workflows/cars24-preview.yml'
   workflow_dispatch:
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: pages
-  cancel-in-progress: true
+  contents: write
 
 jobs:
-  build:
+  publish-preview:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout legacy main
@@ -45,29 +41,18 @@ jobs:
           CARS24_PREVIEW_BASE: /autobot/preview
         run: npm run build
 
-      - name: Assemble legacy root plus Astro preview
+      - name: Write preview into main branch
         run: |
-          mkdir -p site-root
-          rsync -a --exclude='.git' --exclude='.github' --exclude='node_modules' legacy/ site-root/
-          mkdir -p site-root/preview
-          rsync -a astro/dist/ site-root/preview/
-          touch site-root/.nojekyll
-
-      - name: Configure Pages
-        uses: actions/configure-pages@v5
-
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: site-root
-
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+          rm -rf legacy/preview
+          mkdir -p legacy/preview
+          rsync -a astro/dist/ legacy/preview/
+          cd legacy
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add preview
+          if git diff --cached --quiet; then
+            echo "Preview already up to date"
+          else
+            git commit -m "Publish Cars24 Astro preview"
+            git push origin main
+          fi
