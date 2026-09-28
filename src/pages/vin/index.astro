@@ -1,10 +1,10 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import VinDecoder from '../../components/VinDecoder';
+import VinPassport from '../../components/VinPassport';
 ---
-<BaseLayout title="VIN-декодер Cars24" description="Розшифровка VIN, характеристики NHTSA та історія Cars24.">
+<BaseLayout title="VIN-паспорт Cars24" description="Безкоштовна розшифровка VIN: офіційні дані NHTSA, Vehicle Graph Cars24, фото, аукціонні та ринкові спостереження.">
   <div class="shell page">
-    <header class="page-head"><div class="eyebrow">VIN · Vehicle Graph</div><h1>Перевірка VIN</h1><p>Офіційне декодування NHTSA вже поєднане з історією Cars24. Далі ця сторінка стане повним паспортом конкретної машини.</p></header>
-    <section class="panel"><VinDecoder client:load /></section>
+    <header class="page-head"><div class="eyebrow">VIN · NHTSA + Cars24 Data Backbone</div><h1>Паспорт конкретної машини</h1><p>Офіційна розшифровка NHTSA поєднується з тим, що Cars24 уже знає про цей VIN: фото, джерела, аукціонні події, ринкові оголошення та історичні розрахункові орієнтири.</p></header>
+    <section class="panel"><VinPassport client:load /></section>
   </div>
 </BaseLayout>
