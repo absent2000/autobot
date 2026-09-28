@@ -1,0 +1,56 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+const API='https://pmjachoteyeviwwzotks.supabase.co/functions/v1/cars24-public-api';
+const vin=(Astro.url.searchParams.get('vin')||'').trim().toUpperCase();
+const auction=(Astro.url.searchParams.get('auction')||'').trim();
+const lot=(Astro.url.searchParams.get('lot')||'').trim();
+let graph:any=null;
+if(vin){try{const r=await fetch(`${API}/vin?vin=${encodeURIComponent(vin)}`);if(r.ok) graph=await r.json();}catch{}}
+const lots=graph?.auction_lots||[];
+const exact=lots.find((x:any)=>String(x.lot_number||x.lot_id||x.id||'')===lot) || lots[0] || null;
+const vehicle=graph?.vehicle||null;
+const model=graph?.model||null;
+const photos=graph?.photos||[];
+const title=exact?.title || [vehicle?.year,vehicle?.make,vehicle?.model].filter(Boolean).join(' ') || (vin?`Лот ${vin}`:'Картка аукціонного лота');
+const sourceUrl=exact?.source_url||exact?.url||'';
+---
+<BaseLayout title={`${title} — Cars24`} description="Картка конкретного аукціонного лота Cars24: фото, VIN, аукціонні дані, історія та переходи до VIN-паспорта й енциклопедії.">
+<section class="lotPage"><div class="shell">
+  <div class="crumbs"><a href="/auctions/">← Аукціони</a>{auction&&<span>{auction}</span>}{lot&&<span>Lot {lot}</span>}</div>
+  {!vin && !lot ? <div class="empty"><h1>Лот не вказаний</h1><p>Ця сторінка відкривається з конкретного результату аукціонного пошуку.</p><a href="/auctions/">До пошуку аукціонів</a></div> :
+  <div class="lotGrid">
+    <section class="gallery">
+      <div class="mainPhoto">{photos[0]?.url||photos[0]?<img src={photos[0]?.url||photos[0]} alt={title}/>:<div class="ph">Cars24 · LOT</div>}</div>
+      {photos.length>1&&<div class="thumbs">{photos.slice(1,7).map((p:any)=><img src={p?.url||p} alt="Фото лота" loading="lazy"/>)}</div>}
+    </section>
+    <aside class="summary">
+      <div class="kicker">{auction||exact?.auction_house||'Аукціон США'} {lot&&<>· Lot {lot}</>}</div>
+      <h1>{title}</h1>
+      {vin&&<div class="vin">VIN <b>{vin}</b></div>}
+      <div class="facts">
+        <div><small>Поточна ставка</small><strong>{exact?.current_bid_usd?`$${Number(exact.current_bid_usd).toLocaleString('en-US')}`:'—'}</strong></div>
+        <div><small>Buy Now</small><strong>{exact?.buy_now_usd?`$${Number(exact.buy_now_usd).toLocaleString('en-US')}`:'—'}</strong></div>
+        <div><small>Пробіг</small><strong>{exact?.odometer?Number(exact.odometer).toLocaleString('en-US'):'—'}</strong></div>
+        <div><small>Пошкодження</small><strong>{exact?.primary_damage||'—'}</strong></div>
+      </div>
+      <a class="calc" href="https://t.me/Egor_Cars24" target="_blank" rel="noopener">Розрахувати цей лот</a>
+      <div class="links">
+        {vin&&<a href={`/vin/?vin=${encodeURIComponent(vin)}`}>VIN-паспорт</a>}
+        {model?.vehicle_type&&model?.make_slug&&model?.model_slug&&<a href={`/catalog/${model.vehicle_type}/${model.make_slug}/${model.model_slug}/`}>Енциклопедія моделі</a>}
+        {sourceUrl&&<a href={sourceUrl} target="_blank" rel="noopener">Оригінал аукціону ↗</a>}
+      </div>
+    </aside>
+  </div>}
+  {(vin||lot)&&<section class="details"><h2>Дані конкретного лота</h2><div class="detailGrid">
+    <div><span>Аукціон</span><b>{auction||exact?.auction_house||'—'}</b></div>
+    <div><span>Lot ID</span><b>{lot||exact?.lot_number||exact?.lot_id||'—'}</b></div>
+    <div><span>VIN</span><b>{vin||exact?.vin||'—'}</b></div>
+    <div><span>Статус</span><b>{exact?.status||exact?.sale_status||'—'}</b></div>
+    <div><span>Майданчик</span><b>{exact?.yard_name||exact?.location||'—'}</b></div>
+    <div><span>Дата торгів</span><b>{exact?.sale_date||exact?.auction_date||'—'}</b></div>
+  </div></section>}
+</div></section>
+</BaseLayout>
+<style>
+.lotPage{background:#f5f5f3;min-height:70vh;padding:28px 0 72px;color:#111820}.crumbs{display:flex;gap:12px;align-items:center;font-size:12px;color:#707780;margin-bottom:18px}.crumbs a{font-weight:800;color:#111820}.lotGrid{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(330px,.75fr);gap:28px;align-items:start}.gallery,.summary,.details,.empty{background:#fff;border-radius:20px}.gallery{padding:14px}.mainPhoto{aspect-ratio:4/3;background:#e9e9e7;border-radius:14px;overflow:hidden;display:grid;place-items:center}.mainPhoto img{width:100%;height:100%;object-fit:cover}.ph{font:800 28px 'Barlow Condensed',sans-serif;color:#8b9197}.thumbs{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:8px}.thumbs img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:8px}.summary{padding:28px;position:sticky;top:92px}.kicker{font-size:11px;text-transform:uppercase;letter-spacing:.08em;font-weight:900;color:#8d949a}.summary h1{font-family:'Barlow Condensed',sans-serif;font-size:clamp(36px,4vw,56px);line-height:.95;margin:8px 0 16px}.vin{font-size:12px;padding:10px 0 18px;border-bottom:1px solid #eee}.vin b{font-family:monospace}.facts{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid #eee}.facts>div{padding:18px 0}.facts small{display:block;color:#92979c;font-size:11px}.facts strong{font-size:22px}.calc{display:block;background:#ffd000;color:#111820;text-align:center;padding:15px;border-radius:10px;font-weight:900;margin-top:22px}.links{display:grid;gap:8px;margin-top:18px}.links a{background:#f4f4f2;border-radius:8px;padding:11px 12px;font-size:13px;font-weight:750}.details{margin-top:24px;padding:28px}.details h2{font-family:'Barlow Condensed',sans-serif;font-size:34px;margin:0 0 18px}.detailGrid{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid #eee;border-left:1px solid #eee}.detailGrid>div{padding:18px;border-right:1px solid #eee;border-bottom:1px solid #eee}.detailGrid span{display:block;color:#90969b;font-size:11px;margin-bottom:4px}.detailGrid b{font-size:14px}.empty{padding:50px}.empty h1{font-family:'Barlow Condensed',sans-serif;font-size:48px;margin:0 0 10px}.empty a{display:inline-block;background:#ffd000;color:#111820;font-weight:900;padding:12px 16px;border-radius:9px;margin-top:10px}@media(max-width:900px){.lotGrid{grid-template-columns:1fr}.summary{position:static}.thumbs{grid-template-columns:repeat(3,1fr)}.detailGrid{grid-template-columns:1fr 1fr}}@media(max-width:560px){.detailGrid{grid-template-columns:1fr}.summary,.details{padding:20px}}
+</style>
