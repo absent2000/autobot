@@ -32,6 +32,21 @@ const year=new Date().getUTCFullYear();
       <div class="shell c24-footer-main"><div class="c24-footer-brand"><a class="c24-logo" href="/"><img src="https://cars24.com.ua/wp-content/uploads/2026/09/Cars24-white-yellow-frame-logo.png" alt="Cars24" /></a><p>Авто та мото зі США.<br />Рахуємо до покупки.</p><a class="c24-footer-phone" href="tel:+380930616201">(093) 061-62-01</a></div><div class="c24-footer-col"><strong>Автомобілі</strong><a href="/auctions/">Авто з аукціонів</a><a href="/auctions/?buy-now=1">Buy Now</a><a href="/catalog/">Каталог</a></div><div class="c24-footer-col"><strong>Cars24</strong><a href="/journal/">Журнал</a><a href="/catalog/moto/">Мото</a><a href="/#how">Як це працює</a></div><div class="c24-footer-col"><strong>Зв'язок</strong><a href="https://t.me/Egor_Cars24" target="_blank" rel="noopener">Telegram</a><a href="https://www.youtube.com/@cars24ua" target="_blank" rel="noopener">YouTube</a><a href="tel:+380930616201">Зателефонувати</a></div></div>
       <div class="shell c24-footer-bottom"><span>© {year} Cars24</span><span>9 років доставляємо авто зі США</span><a href="/">cars24.com.ua</a></div>
     </footer>
-    <script is:inline>document.querySelector('[data-search-toggle]')?.addEventListener('click',()=>{const box=document.querySelector('[data-global-search]');box?.classList.toggle('is-open');if(box?.classList.contains('is-open'))box.querySelector('input')?.focus();});document.querySelector('[data-menu-toggle]')?.addEventListener('click',()=>document.querySelector('[data-mobile-menu]')?.classList.toggle('is-open'));</script>
+    <script is:inline>
+      document.querySelector('[data-search-toggle]')?.addEventListener('click',()=>{const box=document.querySelector('[data-global-search]');box?.classList.toggle('is-open');if(box?.classList.contains('is-open'))box.querySelector('input')?.focus();});
+      document.querySelector('[data-menu-toggle]')?.addEventListener('click',()=>document.querySelector('[data-mobile-menu]')?.classList.toggle('is-open'));
+      (()=>{
+        const previewPrefix='/autobot/preview';
+        if(location.hostname!=='absent2000.github.io'||!location.pathname.startsWith(previewPrefix)) return;
+        const fix=(root=document)=>{
+          root.querySelectorAll?.('a[href^="/"],form[action^="/"]').forEach(el=>{
+            const attr=el.tagName==='FORM'?'action':'href'; const value=el.getAttribute(attr); if(!value||value.startsWith(previewPrefix+'/')) return;
+            el.setAttribute(attr,previewPrefix+value);
+          });
+        };
+        fix();
+        new MutationObserver(ms=>ms.forEach(m=>m.addedNodes.forEach(n=>{if(n.nodeType===1)fix(n)}))).observe(document.body,{childList:true,subtree:true});
+      })();
+    </script>
   </body>
 </html>
