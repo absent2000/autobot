@@ -2,7 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import SearchCars from '../../components/SearchCars';
 ---
-<BaseLayout title="Пошук — Cars24" description="Пошук Cars24 по марках і моделях.">
+<BaseLayout title="Пошук — Cars24" description="Пошук Cars24 по марках і моделях." noindex={true}>
 <main class="searchPage"><div class="shell"><div class="crumbs"><a href="/">Головна</a><span>›</span>Пошук</div><section class="head"><span>ПОШУК CARS24</span><h1>Знайти потрібне</h1><p>Марка, модель або VIN. Каталог шукає по структурованих даних Cars24.</p></section><div class="layout"><section><SearchCars client:load /></section><aside><span>ПОТРІБНА ДОПОМОГА?</span><h3>Не знайшли потрібне авто?</h3><p>Надішліть VIN або опишіть, що шукаєте. Допоможемо знайти лот і порахувати його до покупки.</p><a href="https://t.me/Egor_Cars24" target="_blank" rel="noopener">Написати Cars24</a></aside></div></div></main>
 </BaseLayout>
 <style>.searchPage{background:#f7f8fa;padding:28px 0 70px;min-height:70vh}.crumbs{font-size:12px;color:#7b858e}.crumbs span{margin:0 8px}.head{padding:34px 0 24px}.head>span,.layout aside>span{font-size:11px;font-weight:900;letter-spacing:.11em;color:#a77d00}.head h1{font-family:var(--font-display);font-size:clamp(52px,7vw,82px);line-height:.9;margin:8px 0 10px}.head p{color:#68727a}.layout{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:22px}.layout aside{background:#111820;color:#fff;border-radius:18px;padding:24px;height:max-content}.layout aside h3{font-size:25px;margin:8px 0}.layout aside p{color:#b9c0c5;line-height:1.6}.layout aside a{display:inline-flex;background:#ffd000;color:#111;padding:11px 14px;border-radius:10px;font-weight:900}@media(max-width:800px){.layout{grid-template-columns:1fr}}</style>
