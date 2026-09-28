@@ -2,15 +2,6 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 <BaseLayout title="Сторінку не знайдено — Cars24" description="Сторінку Cars24 не знайдено." noindex={true}>
-  <div class="shell page">
-    <section class="notFound">
-      <div class="eyebrow">404</div>
-      <h1>Такої сторінки немає.</h1>
-      <p>Поверніться до каталогу, перевірте VIN або почніть з бюджету.</p>
-      <div><a class="primary" href="/">На головну</a><a href="/catalog/">Каталог</a><a href="/vin/">VIN-декодер</a></div>
-    </section>
-  </div>
+<main class="zero"><div class="shell"><div class="crumbs"><a href="/">Головна</a><span>›</span>404</div><section class="hero404"><div class="num">404</div><span class="kicker">СТОРІНКУ НЕ ЗНАЙДЕНО</span><h1>Схоже, тут нічого немає.</h1><p>Можливо, сторінку перенесли або адреса змінилася. Знайдіть потрібне через пошук або поверніться до автомобілів.</p><form action="/search/"><input type="search" name="q" placeholder="VIN, марка, модель, стаття..."/><button type="submit">Знайти</button></form><div class="actions"><a class="primary" href="/auctions/">Знайти авто</a><a href="/journal/">Перейти в журнал →</a></div></section></div></main>
 </BaseLayout>
-<style>
-.notFound{min-height:58vh;display:grid;place-content:center;text-align:center}.notFound h1{font-size:clamp(42px,7vw,78px);letter-spacing:-.055em;margin:8px 0 12px}.notFound p{color:#6b7280;font-size:18px}.notFound>div:last-child{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:12px}.notFound a{border:1px solid #d9d6ce;background:#fffdf8;border-radius:12px;padding:11px 15px;font-weight:850}.notFound a.primary{background:#111827;border-color:#111827;color:white}
-</style>
+<style>.zero{background:#f7f8fa;min-height:70vh;padding:28px 0 80px}.crumbs{font-size:12px;color:#7d8790}.crumbs span{margin:0 8px}.hero404{max-width:780px;margin:45px auto 0;text-align:center}.num{font-family:var(--font-display);font-size:clamp(120px,20vw,240px);line-height:.75;color:#e7eaed;letter-spacing:-.07em}.kicker{display:block;font-size:11px;font-weight:900;letter-spacing:.13em;color:#a57d00;margin-top:24px}.hero404 h1{font-family:var(--font-display);font-size:clamp(48px,7vw,76px);line-height:.92;margin:10px 0 14px}.hero404 p{max-width:620px;margin:0 auto 24px;color:#69737c;line-height:1.7}.hero404 form{display:flex;gap:8px;max-width:650px;margin:0 auto}.hero404 input{flex:1;height:52px;border:1px solid #dfe4e8;background:#fff;border-radius:11px;padding:0 15px}.hero404 button{border:0;border-radius:11px;background:#ffd000;padding:0 20px;font-weight:900}.actions{display:flex;justify-content:center;gap:14px;align-items:center;margin-top:20px}.actions a{font-weight:850}.actions .primary{background:#111820;color:#fff;padding:12px 16px;border-radius:11px}@media(max-width:540px){.hero404 form{display:grid}.hero404 button{height:48px}.actions{flex-direction:column}}</style>
