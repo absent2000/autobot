@@ -2,7 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import VehicleCard from '../../components/VehicleCard';
 ---
-<BaseLayout title="Картка автомобіля — Cars24" description="Картка конкретного VIN: фото, аукціон, характеристики, Vehicle Graph та розрахунок Cars24.">
+<BaseLayout title="Картка автомобіля — Cars24" description="Картка конкретного VIN: фото, аукціон, характеристики, Vehicle Graph та розрахунок Cars24." noindex={true}>
   <main class="vehiclePage"><div class="shell"><VehicleCard client:load /></div></main>
 </BaseLayout>
 <style>.vehiclePage{background:#f4f6f8;min-height:70vh}</style>
