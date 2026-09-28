@@ -3,6 +3,7 @@ import '../styles/global.css';
 import { site } from '../config/site';
 interface Props { title?: string; description?: string; }
 const { title = site.title, description = site.description } = Astro.props;
+const canonical = new URL(Astro.url.pathname, 'https://cars24.com.ua');
 ---
 <!doctype html>
 <html lang="uk">
@@ -11,7 +12,7 @@ const { title = site.title, description = site.description } = Astro.props;
     <meta name="viewport" content="width=device-width" />
     <meta name="description" content={description} />
     <meta name="theme-color" content="#f4f1e9" />
-    <link rel="canonical" href={new URL(Astro.url.pathname, siteUrl())} />
+    <link rel="canonical" href={canonical} />
     <title>{title}</title>
   </head>
   <body>
@@ -29,7 +30,3 @@ const { title = site.title, description = site.description } = Astro.props;
     <footer class="site-footer"><div class="shell">Cars24 · Авто та мото з США · Дані, а не здогадки</div></footer>
   </body>
 </html>
-
-<script>
-function siteUrl(){ return 'https://cars24.com.ua'; }
-</script>
