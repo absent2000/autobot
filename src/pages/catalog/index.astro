@@ -2,12 +2,22 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import CatalogExplorer from '../../components/CatalogExplorer';
 const API='https://pmjachoteyeviwwzotks.supabase.co/functions/v1/cars24-public-api/catalog?limit=500';
-let models=[];let stats={};let loadError='';
+let models:any[]=[];let stats:any={};let loadError='';
 try{const r=await fetch(API);if(!r.ok)throw new Error(`HTTP ${r.status}`);const j=await r.json();models=j.data||[];stats=j.stats||{};}catch(e){loadError=String(e);}
+const makes=Array.from(new Map(models.map(m=>[`${m.vehicle_type}:${m.make_slug}`,{vehicle_type:m.vehicle_type,make_name:m.make_name,make_slug:m.make_slug,count:models.filter(x=>x.vehicle_type===m.vehicle_type&&x.make_slug===m.make_slug).length}])).values()).sort((a:any,b:any)=>a.make_name.localeCompare(b.make_name));
 ---
 <BaseLayout title="Каталог Cars24" description="Каталог моделей авто і мото Cars24 з перевіреними даними та реальними аукціонними джерелами.">
   <div class="shell page">
     <header class="page-head"><div class="eyebrow">Авто + мото</div><h1>Каталог Cars24</h1><p>Не список оголошень, а нормалізований каталог моделей, до якого підключаються покоління, характеристики, аукціонна історія та актуальні лоти.</p></header>
-    {loadError?<section class="panel">Каталог тимчасово не завантажився з API.</section>:<CatalogExplorer client:load models={models} stats={stats} />}
+    {loadError?<section class="panel">Каталог тимчасово не завантажився з API.</section>:<>
+      <section class="makeDirectory" aria-label="Марки">
+        <div class="directoryHead"><div><span class="eyebrow">Марки</span><h2>Швидкий перехід</h2></div><p>{stats.makes_total||makes.length} марок · {stats.models_total||models.length} моделей</p></div>
+        <div class="makeGrid">{makes.map((m:any)=><a href={`/catalog/${m.vehicle_type}/${m.make_slug}/`}><b>{m.make_name}</b><span>{m.count} моделей · {m.vehicle_type==='moto'?'мото':'авто'}</span></a>)}</div>
+      </section>
+      <CatalogExplorer client:load models={models} stats={stats} />
+    </>}
   </div>
 </BaseLayout>
+<style>
+.makeDirectory{margin-bottom:34px}.directoryHead{display:flex;justify-content:space-between;gap:20px;align-items:end;margin-bottom:14px}.directoryHead h2{font-size:30px;margin:4px 0 0}.directoryHead p{margin:0;color:#6b7280}.makeGrid{display:flex;gap:8px;flex-wrap:wrap}.makeGrid a{display:grid;gap:2px;background:#fffdf8;border:1px solid #d9d6ce;border-radius:13px;padding:10px 12px;min-width:120px}.makeGrid a:hover{border-color:#94a3b8}.makeGrid b{font-size:13px}.makeGrid span{font-size:10px;color:#6b7280}@media(max-width:600px){.directoryHead{display:block}.directoryHead p{margin-top:6px}.makeGrid a{min-width:calc(50% - 4px);flex:1}}
+</style>
