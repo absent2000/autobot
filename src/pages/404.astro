@@ -1,0 +1,16 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="Сторінку не знайдено — Cars24" description="Сторінку Cars24 не знайдено." noindex={true}>
+  <div class="shell page">
+    <section class="notFound">
+      <div class="eyebrow">404</div>
+      <h1>Такої сторінки немає.</h1>
+      <p>Поверніться до каталогу, перевірте VIN або почніть з бюджету.</p>
+      <div><a class="primary" href="/">На головну</a><a href="/catalog/">Каталог</a><a href="/vin/">VIN-декодер</a></div>
+    </section>
+  </div>
+</BaseLayout>
+<style>
+.notFound{min-height:58vh;display:grid;place-content:center;text-align:center}.notFound h1{font-size:clamp(42px,7vw,78px);letter-spacing:-.055em;margin:8px 0 12px}.notFound p{color:#6b7280;font-size:18px}.notFound>div:last-child{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:12px}.notFound a{border:1px solid #d9d6ce;background:#fffdf8;border-radius:12px;padding:11px 15px;font-weight:850}.notFound a.primary{background:#111827;border-color:#111827;color:white}
+</style>

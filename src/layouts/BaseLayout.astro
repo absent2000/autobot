@@ -1,9 +1,16 @@
 ---
 import '../styles/global.css';
 import { site } from '../config/site';
-interface Props { title?: string; description?: string; }
-const { title = site.title, description = site.description } = Astro.props;
+interface Props { title?: string; description?: string; noindex?: boolean; }
+const { title = site.title, description = site.description, noindex = false } = Astro.props;
 const canonical = new URL(Astro.url.pathname, 'https://cars24.com.ua');
+const orgLd={
+  '@context':'https://schema.org',
+  '@type':'Organization',
+  name:'Cars24',
+  url:'https://cars24.com.ua',
+  description:site.description,
+};
 ---
 <!doctype html>
 <html lang="uk">
@@ -12,13 +19,25 @@ const canonical = new URL(Astro.url.pathname, 'https://cars24.com.ua');
     <meta name="viewport" content="width=device-width" />
     <meta name="description" content={description} />
     <meta name="theme-color" content="#f4f1e9" />
+    {noindex&&<meta name="robots" content="noindex,nofollow" />}
     <link rel="canonical" href={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Cars24" />
+    <meta property="og:locale" content="uk_UA" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <script type="application/ld+json" set:html={JSON.stringify(orgLd)} />
     <title>{title}</title>
   </head>
   <body>
+    <a class="skip-link" href="#content">До основного вмісту</a>
     <header class="site-header">
       <div class="shell nav">
-        <a class="brand" href="/">Cars<span>24</span></a>
+        <a class="brand" href="/" aria-label="Cars24 — головна">Cars<span>24</span></a>
         <nav class="links" aria-label="Головна навігація">
           <a href="/catalog/">Каталог</a>
           <a href="/vin/">VIN</a>
@@ -26,7 +45,10 @@ const canonical = new URL(Astro.url.pathname, 'https://cars24.com.ua');
         </nav>
       </div>
     </header>
-    <main><slot /></main>
-    <footer class="site-footer"><div class="shell">Cars24 · Авто та мото з США · Дані, а не здогадки</div></footer>
+    <main id="content"><slot /></main>
+    <footer class="site-footer"><div class="shell"><b>Cars24</b> · Авто та мото з США · Дані, а не здогадки</div></footer>
   </body>
 </html>
+<style>
+.skip-link{position:fixed;left:12px;top:-80px;z-index:100;background:#111827;color:#fff;padding:10px 14px;border-radius:10px;font-weight:800}.skip-link:focus{top:12px}
+</style>
