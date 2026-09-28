@@ -1,0 +1,73 @@
+name: Cars24 Astro preview publish
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout legacy main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: legacy
+
+      - name: Checkout Astro branch
+        uses: actions/checkout@v4
+        with:
+          ref: astro-site
+          path: astro
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install Astro dependencies
+        working-directory: astro
+        run: npm install
+
+      - name: Build Astro preview
+        working-directory: astro
+        env:
+          CARS24_PREVIEW_BASE: /autobot/preview
+        run: npm run build
+
+      - name: Assemble legacy root plus Astro preview
+        run: |
+          mkdir -p site-root
+          rsync -a --exclude='.git' --exclude='.github' --exclude='node_modules' legacy/ site-root/
+          mkdir -p site-root/preview
+          rsync -a astro/dist/ site-root/preview/
+          touch site-root/.nojekyll
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site-root
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
