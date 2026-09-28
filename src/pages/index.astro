@@ -10,42 +10,52 @@ for(const name of preferred){const m=models.find(x=>`${x.make_name} ${x.model_na
 for(const m of models){if(featured.length>=6)break;if(m.image_url&&!featured.some(x=>x.model_id===m.model_id))featured.push(m);}
 ---
 <BaseLayout>
-  <div class="shell page">
-    <section class="hero">
+  <section class="hero" id="budget">
+    <div class="shell">
       <div class="hero-copy">
-        <div class="eyebrow">Cars24 · 7 років з аукціонами США</div>
-        <h1>У мене є бюджет. Що я реально можу собі дозволити?</h1>
-        <p>Починаємо не з красивого оголошення, а з повного бюджету. Cars24 з'єднує каталог моделей, реальні аукціонні дані, VIN та економіку покупки в одному місці.</p>
+        <div class="eyebrow">Cars24 · дані, аукціони, реальна економіка</div>
+        <h1>У мене є бюджет.<br /><strong>Що я можу собі дозволити?</strong></h1>
+        <p>Не починаємо з красивого оголошення. Спочатку дивимось повний бюджет, реальні Cars24-приклади та конкретні VIN.</p>
       </div>
       <div class="tool-card"><BudgetPicker client:load /></div>
-    </section>
+    </div>
+  </section>
 
-    <section class="liveStats" aria-label="Дані Cars24">
-      <div><strong>{stats.models_total||384}</strong><span>моделей у каталозі</span></div>
-      <div><strong>{budgetCoverage.models_with_examples||181}</strong><span>моделей з бюджетними прикладами</span></div>
-      <div><strong>{budgetCoverage.mapped_examples||247}</strong><span>прив'язаних реальних прикладів</span></div>
-      <div><strong>VIN</strong><span>NHTSA + дані Cars24</span></div>
-    </section>
-
-    {featured.length>0&&<section class="section featuredSection">
-      <div class="sectionTop"><div><div class="eyebrow">Каталог</div><h2>Не просто список моделей</h2><p class="section-lead">Кожна модель стає точкою входу до поколінь, характеристик, реальних аукціонних продажів і майбутніх живих лотів.</p></div><a href="/catalog/">Відкрити весь каталог →</a></div>
-      <div class="featuredGrid">{featured.map(m=><a class="featuredCard" href={`/catalog/${m.vehicle_type}/${m.make_slug}/${m.model_slug}/`}><div class="featuredMedia">{m.image_url?<img src={m.image_url} loading="lazy" alt={`${m.make_name} ${m.model_name}`} />:<span>{m.vehicle_type==='moto'?'MOTO':'AUTO'}</span>}</div><div class="featuredBody"><small>{m.vehicle_type==='moto'?'Мото':'Авто'} · {m.year_from||'—'}–{m.year_to||'дотепер'}</small><b>{m.make_name} {m.model_name}</b><span>Покоління · характеристики · аукціонні дані</span></div></a>)}</div>
-    </section>}
-
-    <section class="section">
-      <div class="eyebrow">Один сайт поверх даних Cars24</div>
-      <h2>Від моделі до конкретного VIN</h2>
-      <p class="section-lead">Сайт будується як публічний шар над Cars24 Data Backbone. Дані не дублюються у фронтенді: Astro отримує каталог і SEO-структуру, а інтерактивні інструменти звертаються до контрольованих Supabase API.</p>
-      <div class="grid3">
-        <a class="feature" href="/catalog/"><b>Каталог</b><p>Моделі авто й мото, покоління, характеристики та перевірені зображення.</p></a>
-        <a class="feature" href="/vin/"><b>VIN-декодер</b><p>Безкоштовна розшифровка NHTSA плюс дані Cars24 для конкретного VIN.</p></a>
-        <a class="feature" href="/journal/"><b>Дослідження</b><p>Ринок через дані, аномалії, VIN, ціни, пробіги та міжнародні потоки.</p></a>
+  <section class="home-data">
+    <div class="shell">
+      <div class="liveStats" aria-label="Дані Cars24">
+        <div><strong>{stats.models_total||384}</strong><span>моделей у каталозі</span></div>
+        <div><strong>{budgetCoverage.models_with_examples||181}</strong><span>моделей з бюджетними прикладами</span></div>
+        <div><strong>{budgetCoverage.mapped_examples||247}</strong><span>прив'язаних реальних прикладів</span></div>
+        <div><strong>VIN</strong><span>NHTSA + дані Cars24</span></div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section class="vinCta"><div><div class="eyebrow">Вже є VIN?</div><h2>Перевірте, що це за машина.</h2><p>17 символів → офіційні характеристики NHTSA, структура VIN, recalls і дані Cars24, якщо цей VIN уже є в нашій базі.</p></div><a href="/vin/">Перевірити VIN</a></section>
-  </div>
+  {featured.length>0&&<section class="section home-models">
+    <div class="shell">
+      <div class="sectionTop"><div><div class="eyebrow">Каталог</div><h2>Моделі, за якими стоять дані</h2><p class="section-lead">Покоління, характеристики, аукціонна історія та конкретні VIN — в одному шарі.</p></div><a href="/catalog/">Відкрити весь каталог →</a></div>
+      <div class="featuredGrid">{featured.map(m=><a class="featuredCard" href={`/catalog/${m.vehicle_type}/${m.make_slug}/${m.model_slug}/`}><div class="featuredMedia">{m.image_url?<img src={m.image_url} loading="lazy" alt={`${m.make_name} ${m.model_name}`} />:<span>{m.vehicle_type==='moto'?'MOTO':'AUTO'}</span>}</div><div class="featuredBody"><small>{m.vehicle_type==='moto'?'Мото':'Авто'} · {m.year_from||'—'}–{m.year_to||'дотепер'}</small><b>{m.make_name} {m.model_name}</b><span>Покоління · характеристики · аукціонні дані</span></div></a>)}</div>
+    </div>
+  </section>}
+
+  <section class="section home-tools" id="how">
+    <div class="shell">
+      <div class="eyebrow">Cars24 як інструмент</div>
+      <h2>Від бюджету до конкретного VIN</h2>
+      <p class="section-lead">Публічний сайт працює поверх Cars24 Data Backbone: каталог, VIN, історія аукціонів і розрахунки використовують єдині дані.</p>
+      <div class="grid3">
+        <a class="feature" href="/catalog/"><b>Каталог</b><p>Авто й мото, покоління, характеристики та перевірені зображення.</p></a>
+        <a class="feature" href="/vin/"><b>VIN</b><p>NHTSA плюс дані Cars24 для конкретної машини.</p></a>
+        <a class="feature" href="/journal/"><b>Журнал</b><p>Дослідження ринку через VIN, ціни, пробіги та аукціонні дані.</p></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="home-cta">
+    <div class="shell vinCta"><div><div class="eyebrow">Вже є VIN?</div><h2>Перевірте конкретну машину.</h2><p>17 символів → характеристики NHTSA, Cars24 Vehicle Graph, фото та історія джерел, якщо цей VIN уже є в нашій базі.</p></div><a href="/vin/">Перевірити VIN</a></div>
+  </section>
 </BaseLayout>
 <style>
-.liveStats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:#d9d6ce;border:1px solid #d9d6ce;border-radius:20px;overflow:hidden;margin-top:18px}.liveStats>div{background:#fffdf8;padding:18px;display:grid;gap:3px}.liveStats strong{font-size:25px;letter-spacing:-.04em}.liveStats span{font-size:11px;color:#6b7280}.sectionTop{display:flex;justify-content:space-between;gap:28px;align-items:end}.sectionTop>a{color:#2563eb;font-weight:850;white-space:nowrap;margin-bottom:8px}.featuredGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:24px}.featuredCard{background:#fffdf8;border:1px solid #d9d6ce;border-radius:19px;overflow:hidden}.featuredMedia{aspect-ratio:16/10;background:#e9e6df;display:grid;place-items:center;color:#9ca3af;font-weight:900;overflow:hidden}.featuredMedia img{width:100%;height:100%;object-fit:cover}.featuredBody{padding:14px;display:grid;gap:4px}.featuredBody small{color:#2563eb;font-size:10px;text-transform:uppercase;letter-spacing:.08em;font-weight:850}.featuredBody b{font-size:19px;letter-spacing:-.02em}.featuredBody span{font-size:11px;color:#6b7280}.vinCta{background:#fffdf8;border:1px solid #d9d6ce;border-radius:24px;padding:clamp(24px,4vw,42px);display:flex;justify-content:space-between;align-items:center;gap:28px}.vinCta h2{font-size:clamp(28px,4vw,44px);margin:5px 0 8px;letter-spacing:-.04em}.vinCta p{color:#6b7280;max-width:690px;margin:0;line-height:1.55}.vinCta>a{background:#111827;color:white;padding:14px 18px;border-radius:14px;font-weight:900;white-space:nowrap}@media(max-width:800px){.liveStats{grid-template-columns:1fr 1fr}.featuredGrid{grid-template-columns:1fr 1fr}.sectionTop,.vinCta{display:grid}.sectionTop>a{margin:0}.vinCta>a{text-align:center}}@media(max-width:520px){.featuredGrid{grid-template-columns:1fr}.liveStats{grid-template-columns:1fr 1fr}.liveStats>div{padding:13px}.liveStats strong{font-size:20px}}
+.hero h1 strong{color:#d9ad00;font-weight:700;white-space:nowrap}.home-data{background:#f3f4f4;padding:0 0 30px}.home-models{background:#fff}.home-tools{background:#f3f4f4}.home-cta{background:#ffd000;padding:50px 0}.sectionTop{display:flex;justify-content:space-between;gap:28px;align-items:end}.sectionTop>a{color:#111820;font-weight:850;white-space:nowrap;margin-bottom:8px}.featuredGrid{display:grid;grid-template-columns:repeat(3,1fr);margin-top:24px}.featuredMedia{aspect-ratio:16/10;display:grid;place-items:center;color:#9ca3af;font-weight:900;overflow:hidden}.featuredMedia img{width:100%;height:100%;object-fit:cover}.featuredBody{display:grid;gap:4px}.featuredBody small{font-size:10px;text-transform:uppercase;letter-spacing:.08em;font-weight:850}.featuredBody b{font-size:19px;letter-spacing:-.02em}.featuredBody span{font-size:11px;color:#6b7280}.vinCta{padding:clamp(24px,4vw,42px);display:flex;justify-content:space-between;align-items:center;gap:28px}.vinCta h2{font-family:'Barlow Condensed',sans-serif;font-size:clamp(34px,4vw,48px);line-height:1;margin:5px 0 8px}.vinCta p{color:#6b7280;max-width:690px;margin:0;line-height:1.55}.vinCta>a{padding:14px 18px;font-weight:900;white-space:nowrap}@media(max-width:800px){.featuredGrid{grid-template-columns:1fr 1fr}.sectionTop,.vinCta{display:grid}.sectionTop>a{margin:0}.vinCta>a{text-align:center}}@media(max-width:520px){.featuredGrid{grid-template-columns:1fr}.liveStats{grid-template-columns:1fr 1fr}.liveStats>div{padding:13px}.liveStats strong{font-size:24px}.hero h1 strong{white-space:normal}}
 </style>
