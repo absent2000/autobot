@@ -1,0 +1,23 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+type CatalogItem={model_id:number;vehicle_type:string;make_name:string;make_slug:string;model_name:string;model_slug:string;year_from:number|null;year_to:number|null;image_url?:string|null};
+export async function getStaticPaths(){
+  const api='https://pmjachoteyeviwwzotks.supabase.co/functions/v1/cars24-public-api/catalog?limit=500';
+  const r=await fetch(api);if(!r.ok)return [];
+  const j=await r.json();const all:CatalogItem[]=j.data||[];
+  return ['car','moto'].map(type=>({params:{type},props:{models:all.filter(m=>m.vehicle_type===type)}}));
+}
+const {type}=Astro.params;const {models}=Astro.props as {models:CatalogItem[]};
+const makes=Array.from(new Map(models.map(m=>[m.make_slug,{name:m.make_name,slug:m.make_slug,models:models.filter(x=>x.make_slug===m.make_slug)}])).values()).sort((a:any,b:any)=>a.name.localeCompare(b.name));
+const title=type==='moto'?'Мотоцикли':'Автомобілі';
+---
+<BaseLayout title={`${title} — каталог Cars24`} description={`${title} у каталозі Cars24: марки та моделі.`}>
+<main class="typePage"><div class="shell">
+  <div class="crumbs"><a href="/">Головна</a><span>›</span><a href="/catalog/">Каталог</a><span>›</span><b>{title}</b></div>
+  <header class="typeHero"><span>ЕНЦИКЛОПЕДІЯ CARS24</span><h1>{title}</h1><p>{models.length} моделей · {makes.length} марок</p></header>
+  <section class="makeList"><div class="sectionHead"><div><span>МАРКИ</span><h2>Оберіть марку</h2></div><a href="/catalog/">Увесь каталог →</a></div><div class="makeGrid">{makes.map((mk:any)=><a href={`/catalog/${type}/${mk.slug}/`}><strong>{mk.name}</strong><span>{mk.models.length} моделей</span><p>{mk.models.slice(0,3).map((m:any)=>m.model_name).join(' · ')}</p></a>)}</div></section>
+</div></main>
+</BaseLayout>
+<style>
+.typePage{background:#f7f8fa;padding:28px 0 72px}.crumbs{font-size:13px;color:#858e98}.crumbs span{margin:0 8px;color:#b8bec5}.typeHero{margin-top:20px;background:#111820;color:#fff;border-radius:22px;padding:48px;min-height:250px;display:flex;flex-direction:column;justify-content:end}.typeHero>span,.sectionHead span{font-size:11px;letter-spacing:.12em;font-weight:900;color:#ffd000}.typeHero h1{font-family:'Barlow Condensed',sans-serif;font-size:72px;line-height:.9;margin:8px 0 10px;text-transform:uppercase}.typeHero p{margin:0;color:#b7c0c7}.makeList{padding-top:40px}.sectionHead{display:flex;justify-content:space-between;align-items:end;margin-bottom:18px}.sectionHead span{color:#9b7900}.sectionHead h2{font-size:32px;margin:5px 0 0}.sectionHead>a{font-size:12px;font-weight:850}.makeGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.makeGrid>a{background:#fff;border-radius:18px;padding:20px;min-height:150px}.makeGrid strong{display:block;font-size:20px}.makeGrid span{display:block;color:#9b7900;font-size:10px;font-weight:900;margin-top:5px}.makeGrid p{font-size:12px;color:#737d85;line-height:1.55;margin:14px 0 0}.makeGrid>a:hover{transform:translateY(-2px)}@media(max-width:1050px){.makeGrid{grid-template-columns:repeat(3,1fr)}}@media(max-width:760px){.makeGrid{grid-template-columns:repeat(2,1fr)}.typeHero h1{font-size:56px}}@media(max-width:520px){.makeGrid{grid-template-columns:1fr}.typeHero{padding:30px;min-height:210px}.typeHero h1{font-size:48px}}
+</style>
