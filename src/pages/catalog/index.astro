@@ -1,0 +1,10 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+const budget=Astro.url.searchParams.get('budget');
+---
+<BaseLayout title="Каталог Cars24">
+  <div class="shell page">
+    <header class="page-head"><div class="eyebrow">Авто + мото</div><h1>Каталог Cars24</h1><p>{budget?`Бюджет під ключ: $${Number(budget).toLocaleString('en-US')}. Тут будуть тільки варіанти, які проходять реальну економіку Cars24.`:'Енциклопедія моделей та живі лоти з аукціонів США.'}</p></header>
+    <section class="panel"><strong>Наступний шар: 384 моделі + актуальні аукціонні лоти з Supabase.</strong><p style="color:#6b7280;margin:8px 0 0">Каркас маршруту вже готовий; підключення каталогу робимо без дублювання даних у фронтенді.</p></section>
+  </div>
+</BaseLayout>

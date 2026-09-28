@@ -1,0 +1,35 @@
+---
+import '../styles/global.css';
+import { site } from '../config/site';
+interface Props { title?: string; description?: string; }
+const { title = site.title, description = site.description } = Astro.props;
+---
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#f4f1e9" />
+    <link rel="canonical" href={new URL(Astro.url.pathname, siteUrl())} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="shell nav">
+        <a class="brand" href="/">Cars<span>24</span></a>
+        <nav class="links" aria-label="Головна навігація">
+          <a href="/catalog/">Каталог</a>
+          <a href="/vin/">VIN</a>
+          <a href="/journal/">Дослідження</a>
+        </nav>
+      </div>
+    </header>
+    <main><slot /></main>
+    <footer class="site-footer"><div class="shell">Cars24 · Авто та мото з США · Дані, а не здогадки</div></footer>
+  </body>
+</html>
+
+<script>
+function siteUrl(){ return 'https://cars24.com.ua'; }
+</script>

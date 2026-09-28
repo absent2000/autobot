@@ -1,0 +1,27 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import BudgetPicker from '../components/BudgetPicker';
+---
+<BaseLayout>
+  <div class="shell page">
+    <section class="hero">
+      <div class="hero-copy">
+        <div class="eyebrow">Cars24 · 7 років з аукціонами США</div>
+        <h1>Скільки авто ви реально можете собі дозволити?</h1>
+        <p>Починаємо не з красивого оголошення, а з повного бюджету: лот, збори, логістика, розмитнення та реальна економіка покупки.</p>
+      </div>
+      <div class="tool-card"><BudgetPicker client:load /></div>
+    </section>
+
+    <section class="section">
+      <div class="eyebrow">Не звичайний автоблог</div>
+      <h2>Один сайт поверх усіх даних Cars24</h2>
+      <p class="section-lead">Каталог моделей, живі аукціонні лоти, VIN-історія, ціни ринку, розрахунок під ключ та дослідження з'єднуються навколо конкретної машини.</p>
+      <div class="grid3">
+        <a class="feature" href="/catalog/"><b>Каталог</b><p>Моделі авто й мото та реальні лоти, які можна купити зараз.</p></a>
+        <a class="feature" href="/vin/"><b>VIN-декодер</b><p>NHTSA + історія Cars24 + аукціонні події в одному місці.</p></a>
+        <a class="feature" href="/journal/"><b>Дослідження</b><p>Ринок через дані, аномалії, VIN, ціни, пробіги та торгові потоки.</p></a>
+      </div>
+    </section>
+  </div>
+</BaseLayout>
