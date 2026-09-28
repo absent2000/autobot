@@ -2,12 +2,14 @@
 import BaseLayout from '../../../../layouts/BaseLayout.astro';
 import ModelDetail from '../../../../components/ModelDetail';
 const API='https://pmjachoteyeviwwzotks.supabase.co/functions/v1/cars24-public-api/catalog?limit=500';
+type CatalogItem={model_id:number;vehicle_type:string;make_name:string;make_slug:string;model_name:string;model_slug:string;year_from:number|null;year_to:number|null};
 export async function getStaticPaths(){
   const r=await fetch(API); if(!r.ok)return [];
   const j=await r.json();
-  return (j.data||[]).map((m:any)=>({params:{type:m.vehicle_type,make:m.make_slug,model:m.model_slug},props:{item:m}}));
+  return (j.data||[]).map((m:CatalogItem)=>({params:{type:m.vehicle_type,make:m.make_slug,model:m.model_slug},props:{item:m}}));
 }
-const {type,make,model}=Astro.params;const {item}=Astro.props;
+const {type,make,model}=Astro.params;
+const {item}=Astro.props as {item:CatalogItem};
 ---
 <BaseLayout title={`${item.make_name} ${item.model_name} — Cars24`} description={`${item.make_name} ${item.model_name}: покоління, характеристики та дані Cars24.`}>
   <div class="shell page">
