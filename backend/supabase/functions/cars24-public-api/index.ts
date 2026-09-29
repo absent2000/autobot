@@ -60,7 +60,7 @@ function parserLot(row: any, full = false) {
       u.pathname = u.pathname.replace(/_hrs\.jpg$/i, "_ful.jpg");
     }
     return u.toString();
-  }).filter(Boolean).slice(0, 60);
+  }).filter(Boolean);
   const rawVin = String(row.vin || g.vin || "").toUpperCase();
   const vin = /^[A-HJ-NPR-Z0-9]{17}$/.test(rawVin) ? rawVin : null;
   const vinMasked = typeof g.vin_masked === "string" && g.vin_masked.trim() ? g.vin_masked.trim() : null;
