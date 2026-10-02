@@ -37,4 +37,11 @@ jobs:
           OIDC_TOKEN: ${{ steps.oidc.outputs.token }}
         run: |
           set -euo pipefail
-          curl --fail --silent --show-error             --max-time 55             -X POST             -H "Authorization: Bearer $OIDC_TOKEN"             -H "Content-Type: application/json"             --data '{"max_pages":4}'             "https://pmjachoteyeviwwzotks.supabase.co/functions/v1/parser-best-sync"
+          response="$(curl --silent --show-error             --max-time 55             -w $'\n%{http_code}'             -X POST             -H "Authorization: Bearer $OIDC_TOKEN"             -H "Content-Type: application/json"             --data '{"max_pages":4}'             "https://pmjachoteyeviwwzotks.supabase.co/functions/v1/parser-best-sync")"
+          status="${response##*$'\n'}"
+          body="${response%$'\n'*}"
+          echo "$body"
+          if [ "$status" -ge 400 ]; then
+            echo "HTTP $status" >&2
+            exit 1
+          fi
